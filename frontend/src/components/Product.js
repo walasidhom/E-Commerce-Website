@@ -28,7 +28,7 @@ const Product = ({ product }) => {
               <Rating rating={product.rating} numReviews={product.numReviews} />
         <Card.Text>${product.price}</Card.Text>
         {product.countInStock === 0 ? <Button variant='light' disabled>out of Stock</Button>
-        : <Button style={{backgroundColor: 'gold',borderColor: 'black', color:'black'}} onClick={()=>AddToCartHandler(product)}>Add to Card</Button>}
+        : <Button className='primary' onClick={()=>AddToCartHandler(product)}>Add to Card</Button>}
             
           </Card.Body>
           

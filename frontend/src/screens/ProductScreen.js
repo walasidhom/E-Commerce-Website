@@ -140,7 +140,7 @@ const ProductScreen = () => {
                     {product.countInStock > 0 &&
                       <ListGroup.Item>
                         <div className='d-grid'>
-                          <Button style={{ backgroundColor: 'gold', borderColor: 'black' , fontSize: '1.6rem' }} onClick={addToCartHandler}>
+                          <Button className='primary' onClick={addToCartHandler}>
                             Add to Card
                           </Button>
                         </div>

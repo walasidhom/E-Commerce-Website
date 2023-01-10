@@ -36,7 +36,7 @@ main {
 }
 
 .rating span {
-  color: #ffd700;
+  color: #f0c040;
 }
 
 .product img {
@@ -54,7 +54,7 @@ main {
 
 
 .icon {
-  color: #ffd700;
+  color: #f0c040;
   margin: 20px -10px 15px 0px;
 }
 
@@ -65,4 +65,23 @@ img.small {
 
 .min-30 {
   min-width: 30rem;
+}
+
+/* Common */
+h1 {
+  font-size: 1.6rem;
+  padding: 1rem 0;
+}
+
+h2 {
+  font-size: 1.6rem;
+  padding: 1rem 0;
+}
+
+Button.primary {
+
+  background-color: #f0c040;
+  border-color: black;
+  font-size: '1.6rem';
+  color: 'black'
 }

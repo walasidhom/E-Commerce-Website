@@ -94,7 +94,7 @@ const CartScreen = () => {
                               <ListGroup.Item>
                                 <div className='d-grid'>
                                       <Button
-                                          style={{ backgroundColor: 'gold', borderColor: 'black' , color:'black'}}
+                                          className='primary'
                                           disabled={cartItems.length === 0}
                                       onClick={checkoutHandler}>
                                           Proceed to Checkout
