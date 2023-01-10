@@ -1,0 +1,68 @@
+html {
+  font-size: 62.5%;
+  /* 16px * 62.5 = 10px = 1rem */
+  box-sizing: border-box;
+}
+
+body {
+  font: 1.6rem Helvetica;
+  height: 100vh;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+* {
+  font-size: 15px;
+}
+
+.site-container {
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  /*if there is no space in a row, new items will be pushed down to the new line */
+  justify-content: center;
+}
+
+.rating span {
+  color: #ffd700;
+}
+
+.product img {
+  width: 100%;
+  max-width: 400px;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.img-large {
+  width: 100%;
+}
+
+
+.icon {
+  color: #ffd700;
+  margin: 20px -10px 15px 0px;
+}
+
+img.small {
+  max-width: 5rem;
+  width: 100%;
+}
+
+.min-30 {
+  min-width: 30rem;
+}
