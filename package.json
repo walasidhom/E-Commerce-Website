@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "axios": "^1.2.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "react-redux": "^8.0.5",
+    "react-toastify": "^9.1.1",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.15",
+    "@types/jsonwebtoken": "^9.0.1"
+  }
+}

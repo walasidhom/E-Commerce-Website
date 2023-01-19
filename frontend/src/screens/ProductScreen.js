@@ -1,69 +1,41 @@
 import axios from 'axios';
-import { useContext, useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
 import { Badge, Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
-import {Navigate, useNavigate, useParams} from 'react-router-dom'
+import {Link, Navigate, useNavigate, useParams} from 'react-router-dom'
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/Rating';
 import { motion } from "framer-motion";
 import { getError } from '../components/utils';
-import { Store } from './Store';
+import { useDispatch, useSelector } from 'react-redux';
+import { detailsProduct } from '../JS/Actions/productActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBackward } from "@fortawesome/free-solid-svg-icons";
 
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false , product:action.payload };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false ,  error : action.payload};
-    default:
-      return state;
-  }
-}
 
 
 const ProductScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const params = useParams();
-  const { slug } = params;
+  const { id: productId } = params;
 
-  const [{loading , error , product}, dispatch] = useReducer(reducer, {loading:true , error:'' , product:[]})
+  const [qty, setQty] = useState(1);
+  const productDetails = useSelector((state) => state.productDetails);
+  const { loading, error, product } = productDetails;
 
-    useEffect(() => {
-      const fetchData = async () => {
-        dispatch({ type: 'FETCH_REQUEST' });
-        try {
-          const result = await axios.get(`/api/products/slug/${slug}`);
-          dispatch({ type: 'FETCH_SUCCESS' , payload:result.data });
-        } catch (error) {
-          dispatch({ type: 'FET CH_FAIL' , payload:getError(error) });
-        }
-            
-            
-        };
-        fetchData();
-    }, [slug])
-    
   
-  //get Context
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart } = state;
-  const addToCartHandler = async () => {
-    //AJAX req
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    //find if the current product exists in the cart or not
-    const existItem = cart.cartItems.find((x) => x._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
-    }
-    
-    ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
-    navigate('/cart');
-  }; 
+
+  useEffect(() => {
+    dispatch(detailsProduct(productId));
+  }, [dispatch, productId]);
+
+  const addToCartHandler = () => {
+    navigate(`/cart/${productId}?qty=${qty}`);
+  };
+  
   return (
       <div>
       {loading ?
@@ -73,6 +45,7 @@ const ProductScreen = () => {
           <MessageBox variant='danger'>{error}</MessageBox>
           :
           <div>
+            <Link to="/" title='Go back'><FontAwesomeIcon icon={faBackward} className='icon' size='xl'/></Link>
             <Row>
               <Col md={6}>
                 <motion.div
@@ -102,10 +75,7 @@ const ProductScreen = () => {
                     numReviews={product.numReviews} />
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    price : ${product.price}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    Description: {product.description}
+                    Description : {product.description}
                   </ListGroup.Item>
                   </ListGroup>
                   </motion.div>
@@ -115,20 +85,20 @@ const ProductScreen = () => {
                 
                 animate={{ x: [1000, 0, 0] ,y: 0 }}
                 transition={{ type: "spring", duration: 2.5 }}>
-                <Card>
+                <Card className='mt-4'>
                   <ListGroup variant='flush'>
                     <ListGroup.Item>
                       <Row>
-                        <Col>Price:</Col>
-                        <Col>${product.price}</Col>
+                        <Col>Price :</Col>
+                        <Col style={{textAlign:"right" , fontWeight:'bold'}}>${product.price}</Col>
                       </Row>
                     </ListGroup.Item>
                   </ListGroup>
                   <ListGroup variant='flush'>
                     <ListGroup.Item>
                       <Row>
-                        <Col>Status:</Col>
-                        <Col>
+                        <Col>Status :</Col>
+                        <Col style={{textAlign:"right"}}>
                           {product.countInStock > 0 ?
                             <Badge bg='success'>In Stock</Badge>
                             :
@@ -136,20 +106,51 @@ const ProductScreen = () => {
                         }
                         </Col>
                       </Row>
-                    </ListGroup.Item>
-                    {product.countInStock > 0 &&
-                      <ListGroup.Item>
-                        <div className='d-grid'>
-                          <Button className='primary' onClick={addToCartHandler}>
-                            Add to Card
-                          </Button>
-                        </div>
                       </ListGroup.Item>
-                        }
                     </ListGroup>
+                    {product.countInStock > 0 && (
+                      <>
+                      <ListGroup variant='flush'>
+                        <ListGroup.Item>
+                        <Row>
+                          <Col>Qty :</Col>
+                          <Col style={{textAlign:"right"}}>
+                            <select
+                              value={qty}
+                                  onChange={(e) => setQty(e.target.value)}
+                                  style={{margin:'2px'}}
+                            >
+                              {[...Array(product.countInStock).keys()].map(
+                                (x) => (
+                                  <option key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          </Col>
+                        </Row>
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <ListGroup variant='flush'>
+                      
+                        <ListGroup.Item>
+                          <div className='d-grid'>
+                            <Button className='primary' onClick={addToCartHandler}>
+                              Add to Card
+                            </Button>
+                          </div>
+                        </ListGroup.Item>
+                      
+                        </ListGroup>
+                      </>
+                      
+                    )
+                      
+                    }
                     
                   </Card>
-                  </motion.div>
+                </motion.div>
               </Col>
             </Row>
           </div>

@@ -82,6 +82,13 @@ Button.primary {
 
   background-color: #f0c040;
   border-color: black;
-  font-size: '1.6rem';
-  color: 'black'
+  font-size: 1.2rem;
+  color: black
+}
+
+footer {
+  grid-area: footer;
+  background-color: black;
+  color: #ffffff;
+  padding: 1rem;
 }

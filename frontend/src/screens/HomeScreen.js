@@ -6,44 +6,20 @@ import Product from '../components/Product';
 import { motion } from "framer-motion";
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProducts } from '../JS/Actions/productActions';
 
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false , products:action.payload };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false ,  error : action.payload};
-    default:
-      return state;
-  }
-}
 
 
 const HomeScreen = () => {
 
-//defining a reducer for fetching data from the backend:
-  const [{loading , error , products}, dispatch] = useReducer(logger(reducer), {loading:true , error:'' , products:[]})
+const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products } = productList;
 
-    //const [products, setProducts] = useState([]);
-    useEffect(() => {
-      const fetchData = async () => {
-        dispatch({ type: 'FETCH_REQUEST' });
-        try {
-          //if i success to fetch data
-          const result = await axios.get('/api/products');
-          dispatch({ type: 'FETCH_SUCCESS' , payload:result.data });
-        } catch (error) {
-          // if i fail fetching data
-          dispatch({ type: 'FETCH_FAIL' , payload:error.message });
-        }
-            
-            
-        };
-        fetchData();
-    }, [])
+  useEffect(() => {
+    dispatch(listProducts({}));
+  }, [dispatch]);
     
   return (
     
