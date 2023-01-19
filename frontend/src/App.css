@@ -67,6 +67,16 @@ img.small {
   min-width: 30rem;
 }
 
+.checkout-steps>div {
+  border-bottom: 0.2rem solid #a0a0a0;
+  color: #a0a0a0;
+}
+
+.checkout-steps>div.active {
+  border-bottom: 0.2rem solid #f0c040;
+  color: #f0c040;
+}
+
 /* Common */
 h1 {
   font-size: 1.6rem;
@@ -90,5 +100,5 @@ footer {
   grid-area: footer;
   background-color: black;
   color: #ffffff;
-  padding: 1rem;
+  padding: 0.3rem;
 }

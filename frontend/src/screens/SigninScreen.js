@@ -31,11 +31,11 @@ const SigninScreen = () => {
     }
   }, [navigate, redirect, userInfo]);
   return (
-    <Container style={{ maxWidth: '600px'}}>
+    <Container style={{ maxWidth: '500px' ,justifyContent:'center', alignItems:'center'}}>
       <Helmet>
         <title>Sign In</title>
       </Helmet>
-      <h1 className='my-3'>Sign In</h1>
+      <h1 className='my-3 text-center' style={{fontSize:'30px'}}>Sign In</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>Email</Form.Label>

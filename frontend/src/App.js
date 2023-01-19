@@ -9,13 +9,14 @@ import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
 import NavigationBar from './components/NavigationBar';
 import RegisterScreen from './screens/RegisterScreen';
+import ShippingAddress from './screens/ShippingAddress';
 
 function App() {
   
   
   return (
     <BrowserRouter>
-      <div className='d-flex flex-column site-container'>
+      <div className='site-container d-flex flex-column'>
         <header>
           <ToastContainer position="bottom-center" limit={1} />
           <NavigationBar />
@@ -29,6 +30,7 @@ function App() {
               <Route path="/cart/:id" element={<CartScreen />}></Route>
               <Route path="/signin" element={<SigninScreen />} />
               <Route path='/register' element={<RegisterScreen />} />
+              <Route path='/shipping' element={<ShippingAddress />} />
             </Routes>
           </Container>
           

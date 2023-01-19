@@ -47,11 +47,11 @@ const RegisterScreen = () => {
   
 
   return (
-    <Container style={{ maxWidth: '600px'}}>
+    <Container style={{ maxWidth: '500px' ,justifyContent:'center', alignItems:'center'}}>
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
-      <h1 className='my-3 text-center' style={{fontSize:'30px', fontWeight: 'bold'}}>Sign Up</h1>
+      <h1 className='my-3 text-center' style={{fontSize:'30px'}}>Sign Up</h1>
       {/* {loading && <LoadingBox />}
       {error && <MessageBox variant='danger'>{error}</MessageBox> } */}
 
