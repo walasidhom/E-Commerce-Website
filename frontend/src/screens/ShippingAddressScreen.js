@@ -14,13 +14,18 @@ export default function ShippingAddressScreen() {
     const { userInfo } = userSignin;
 
     const cart = useSelector((state) => state.cart);
-    const { shippingAddress } = cart;
+    const { cartItems , shippingAddress } = cart;
 
     const navigate = useNavigate();
     //if user dosen't signin, redirect him to signin screen
     if (!userInfo){
         navigate('/signin');
-    };
+    } else {
+        if (!cartItems){
+        toast.error('Your Cart is empty!');
+        navigate('/Cart');
+    }
+    } 
 
     const [fullName, setFullName] = useState(shippingAddress.fullName || '' );
     const [address, setAddress] = useState(shippingAddress.address || '');

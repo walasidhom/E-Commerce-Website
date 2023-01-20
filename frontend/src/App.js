@@ -10,6 +10,7 @@ import SigninScreen from './screens/SigninScreen';
 import NavigationBar from './components/NavigationBar';
 import RegisterScreen from './screens/RegisterScreen';
 import ShippingAddressScreen from './screens/ShippingAddressScreen';
+import PaymentMethodScreen from './screens/PaymentMethodScreen';
 
 function App() {
   
@@ -17,8 +18,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className='site-container d-flex flex-column'>
+        <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <ToastContainer position="bottom-center" limit={1} />
           <NavigationBar />
         </header>
         <main>
@@ -31,6 +32,7 @@ function App() {
               <Route path="/signin" element={<SigninScreen />} />
               <Route path='/register' element={<RegisterScreen />} />
               <Route path='/shipping' element={<ShippingAddressScreen />} />
+              <Route path='/payment' element={<PaymentMethodScreen />} />
             </Routes>
           </Container>
           

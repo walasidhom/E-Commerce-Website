@@ -77,6 +77,11 @@ img.small {
   color: #f0c040;
 }
 
+.small-container {
+  max-width: 600px;
+
+}
+
 /* Common */
 h1 {
   font-size: 1.6rem;
