@@ -7,7 +7,6 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/Rating';
 import { motion } from "framer-motion";
-import { getError } from '../components/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsProduct } from '../JS/Actions/productActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

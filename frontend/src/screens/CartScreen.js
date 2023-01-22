@@ -52,7 +52,7 @@ const navigate = useNavigate();
                               {cartItems.map((item) => (
                                     
                                   <ListGroup.Item key={item.product}>
-                                      <Row className='align-items-center' >
+                                      <Row className='align-items-center'>
                                           <Col md={4}>
                                             
                                               <img src={item.image}

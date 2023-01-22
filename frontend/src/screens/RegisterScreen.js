@@ -6,8 +6,7 @@ import { useLocation , Link, useNavigate} from 'react-router-dom';
 import { register } from '../JS/Actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { getError } from '../components/utils';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterScreen = () => {
