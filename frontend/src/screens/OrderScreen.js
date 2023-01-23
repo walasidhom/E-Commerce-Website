@@ -1,34 +1,68 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {  Card, Col, ListGroup, Row } from 'react-bootstrap'
 import { Helmet } from 'react-helmet-async'
 import { useDispatch, useSelector } from 'react-redux'
+import { PayPalButtons , usePayPalScriptReducer } from '@paypal/react-paypal-js'
 import { Link, useParams } from 'react-router-dom'
 import LoadingBox from '../components/LoadingBox'
 import { detailsOrder } from '../JS/Actions/orderActions'
 import MessageBox from '../components/MessageBox'
+import Axios  from 'axios'
 
 const OrderScreen = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    const {id : orderId} = params
-    
+    const { id: orderId } = params;
+
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
+
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading } = orderDetails;
-    
+    const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
     
     
     useEffect(() => {
-        dispatch(detailsOrder(orderId))
-    }, [dispatch, orderId]);
+        const loadPaypalScript = async () => {
+            const { data: clientId } = await Axios.get('/api/keys/paypal', {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+            });
+            paypalDispatch({
+                type: 'resetOptions',
+                value: {
+                    'client-id': clientId,
+                    currency: 'USD',
+                },
+            });
+            
+            paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+        };
+        
+        if (!order) {
+            dispatch(detailsOrder(orderId))
+        } else {
+            if (!order.isPaid) {
+                if (!window.paypal) {
+                    loadPaypalScript();
+                } 
+            }
+        }
+        
+    }, [dispatch, orderId, paypalDispatch, userInfo , order ]);
     
+    const successPaymentHandler = () => {
+        //TODO: dispatch pay order
+    }
     return(
-        loading ? <LoadingBox /> : (
+        loading ?
+            <LoadingBox />
+            : (
             <div>
                 <div className="container small-container">
                     <Helmet>
-                    <title>Order {orderId}</title>
+                    <title>Order {order._id}</title>
                     </Helmet>
-                    <h1 className='my-3' style={{ fontSize: '30px' }}>Order {orderId}</h1>
+                    <h1 className='my-3' style={{ fontSize: '30px' }}>Order {order._id}</h1>
                         <Row>
                             <Col md={8}>
                                 <Card className="mb-3">
@@ -131,7 +165,22 @@ const OrderScreen = () => {
                                             </Col>
                                         </Row>
                                         </ListGroup.Item>
-                                        
+                                        {!order.isPaid && 
+                                            <ListGroup.Item>
+                                                {isPending ? (
+                                                <LoadingBox />
+                                                ) : (
+                                                <div>
+                                                    <PayPalButtons
+                                                    amount={order.totalPrice}
+                                                    onSuccess={successPaymentHandler}
+                                                    
+                                                    ></PayPalButtons>
+                                                </div>
+                                                )}
+                                                
+                                            </ListGroup.Item>
+                                        }
                                     </ListGroup>
                                     </Card.Body>
                                 </Card>

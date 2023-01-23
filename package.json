@@ -5,6 +5,7 @@
     "dotenv": "^16.0.3",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
+    "react-paypal-button-v2": "^2.6.3",
     "react-redux": "^8.0.5",
     "react-toastify": "^9.1.1",
     "redux": "^4.2.0",
