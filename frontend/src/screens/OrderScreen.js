@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { PayPalButtons , usePayPalScriptReducer } from '@paypal/react-paypal-js'
 import { Link, useParams } from 'react-router-dom'
 import LoadingBox from '../components/LoadingBox'
-import { detailsOrder } from '../JS/Actions/orderActions'
+import { detailsOrder, payOrder } from '../JS/Actions/orderActions'
 import MessageBox from '../components/MessageBox'
 import Axios  from 'axios'
+import { ORDER_PAY_RESET } from '../JS/constants/orderConstants'
 
 const OrderScreen = () => {
     const params = useParams();
@@ -19,13 +20,16 @@ const OrderScreen = () => {
 
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading } = orderDetails;
+
+    const orderPay = useSelector((state) => state.orderPay);
+    const { error:errorPay, success:successPay, loading:loadingPay} = orderPay;
     const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
     
     
     useEffect(() => {
         const loadPaypalScript = async () => {
             const { data: clientId } = await Axios.get('/api/keys/paypal', {
-            headers: { authorization: `Bearer ${userInfo.token}` },
+                headers: { authorization: `Bearer ${userInfo.token}` },
             });
             paypalDispatch({
                 type: 'resetOptions',
@@ -38,8 +42,9 @@ const OrderScreen = () => {
             paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
         };
         
-        if (!order) {
-            dispatch(detailsOrder(orderId))
+        if (!order || successPay || order && order._id !== orderId) {
+            dispatch({ type: ORDER_PAY_RESET });
+            dispatch(detailsOrder(orderId));
         } else {
             if (!order.isPaid) {
                 if (!window.paypal) {
@@ -50,8 +55,8 @@ const OrderScreen = () => {
         
     }, [dispatch, orderId, paypalDispatch, userInfo , order ]);
     
-    const successPaymentHandler = () => {
-        //TODO: dispatch pay order
+    const successPaymentHandler = (paymentResult) => {
+        dispatch(payOrder(order , paymentResult))
     }
     return(
         loading ?
@@ -170,13 +175,15 @@ const OrderScreen = () => {
                                                 {isPending ? (
                                                 <LoadingBox />
                                                 ) : (
-                                                <div>
-                                                    <PayPalButtons
-                                                    amount={order.totalPrice}
-                                                    onSuccess={successPaymentHandler}
-                                                    
-                                                    ></PayPalButtons>
-                                                </div>
+                                                    <>
+                                                        {errorPay && <MessageBox variant='danger'>{errorPay}</MessageBox>}
+                                                        {loadingPay && <LoadingBox />}
+                                                        <PayPalButtons
+                                                        amount={order.totalPrice}
+                                                        onSuccess={successPaymentHandler}
+                                                        
+                                                        ></PayPalButtons>
+                                                    </>
                                                 )}
                                                 
                                             </ListGroup.Item>
