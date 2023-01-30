@@ -1,12 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { Badge, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Badge, Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Link } from 'react-router-dom'
 import { signout } from '../JS/Actions/userActions'
+import { useState } from 'react';
+import SearchBox from './SearchBox';
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
 
     const cart = useSelector((state) => state.cart);
     const { cartItems } = cart;
@@ -17,11 +19,18 @@ const NavigationBar = () => {
     const dispatch = useDispatch();
     const signoutHandler = () => {
         dispatch(signout());
-    };
+  };
+  
+
     
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-            <Container>
+      <Container>
+        <Button
+          variant='dark'
+          onClick={() => props.setSidebarIsOpen(!props.sidebarIsOpen)}>
+          <i className='fa fa-bars' style={{fontSize : '20px'}}></i>
+        </Button>
               <LinkContainer to='/'>
                 <Navbar.Brand>
                   <img src='https://pngimg.com/uploads/amazon/amazon_PNG11.png'
@@ -40,12 +49,16 @@ const NavigationBar = () => {
                 <FontAwesomeIcon icon={faShoppingCart} className='icon' size='xl' />
                 <Link to='/Cart' className="nav-link" title='Cart'>
                   
-                  {cartItems.length > 0 && (
+                  {cartItems.length > 0 && 
                     <Badge pill bg="danger" style={{ fontSize: 8 }}>
                       {cartItems.reduce( (a,c)=> a+c.qty, 0)}</Badge>
-                  )}
+                  }
                 </Link>
               </Nav>
+              
+                <SearchBox />
+              
+        
               <Nav>
                 {userInfo ? (
             <NavDropdown style={{paddingRight:'30px'}} title={userInfo.name} id="basic-nav-dropdown" >

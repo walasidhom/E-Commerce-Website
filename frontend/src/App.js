@@ -1,6 +1,6 @@
 import './App.css';
-import {  Container} from 'react-bootstrap';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {  Container, Nav} from 'react-bootstrap';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import { ToastContainer } from 'react-toastify';
@@ -16,16 +16,66 @@ import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import PrivateRoute from './components/PrivateRoute';
+import { useEffect, useState } from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProductCategories } from './JS/Actions/productActions';
+import LoadingBox from './components/LoadingBox';
+import MessageBox from './components/MessageBox';
 function App() {
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
+  const productCategoryList = useSelector((state) => state.productCategoryList);
+  const {loading: loadingCategories,error: errorCategories,categories,} = productCategoryList;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(listProductCategories());
+  }, [])
   
   
   return (
     <BrowserRouter>
-      <div className='site-container d-flex flex-column'>
+      <div className={sidebarIsOpen
+        ?
+        'site-container d-flex flex-column active-cont'
+        :
+        'site-container d-flex flex-column'
+      }>
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <NavigationBar />
+          <NavigationBar sidebarIsOpen={sidebarIsOpen} setSidebarIsOpen={setSidebarIsOpen} />
         </header>
+        <div
+          className={
+            sidebarIsOpen
+              ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
+              : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+          }
+        >
+          <Nav className="flex-column text-white w-100 p-2">
+            <Nav.Item>
+              <strong>Categories</strong>
+            </Nav.Item>
+            {loadingCategories ? (
+              <LoadingBox></LoadingBox>
+            ) : errorCategories ? (
+              <MessageBox variant="danger">{errorCategories}</MessageBox>
+            ) : (
+              <>
+                {categories.map((category) => (
+                  <Nav.Item key={category}>
+                    <Link
+                      to={`/search?category=${category}`}
+                      onClick={() => setSidebarIsOpen(false)}
+                    >
+                      <Nav.Link>{category}</Nav.Link>
+                    </Link>
+                  </Nav.Item>
+                ))}
+              </>)}
+          </Nav>
+        </div>
         <main>
           <Container className='mt-3'>
             <Routes>

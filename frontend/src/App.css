@@ -96,14 +96,40 @@ h2 {
 Button.primary {
 
   background-color: #f0c040;
-  border-color: black;
+  border-color: transparent;
   font-size: 1.2rem;
   color: black
 }
+
+
 
 footer {
   grid-area: footer;
   background-color: black;
   color: #ffffff;
   padding: 0.3rem;
+}
+
+/* sidebar */
+
+
+.side-navbar {
+  width: 240px;
+  height: 100%;
+  position: absolute;
+  left: -300px;
+  background-color: #100901;
+  transition: 0.5s;
+}
+
+.site-container {
+  transition: 0.4s;
+}
+
+.active-cont {
+  margin-left: 240px;
+}
+
+.active-nav {
+  left: 0;
 }
