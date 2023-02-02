@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { listProductCategories } from './JS/Actions/productActions';
 import LoadingBox from './components/LoadingBox';
 import MessageBox from './components/MessageBox';
+import SearchScreen from './screens/SearchScreen';
 function App() {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
@@ -63,16 +64,16 @@ function App() {
               <MessageBox variant="danger">{errorCategories}</MessageBox>
             ) : (
               <>
-                {categories.map((category) => (
-                  <Nav.Item key={category}>
-                    <Link
-                      to={`/search?category=${category}`}
-                      onClick={() => setSidebarIsOpen(false)}
-                    >
-                      <Nav.Link>{category}</Nav.Link>
-                    </Link>
-                  </Nav.Item>
-                ))}
+                {categories.map((c) => (
+                <li key={c}>
+                  <Link
+                      to={`/search?category=${c}&query=&price=&rating=&order=`}
+                      onClick={ ()=>setSidebarIsOpen(false)}
+                  >
+                    {c}
+                  </Link>
+                </li>
+              ))}
               </>)}
           </Nav>
         </div>
@@ -93,6 +94,7 @@ function App() {
               <Route path="/profile" element={<PrivateRoute />} >
                 <Route exact path='/profile' element={<ProfileScreen/>}/>
               </Route>
+              <Route path="/search" element={<SearchScreen />} />
               
             </Routes>
           </Container>
